@@ -142,6 +142,25 @@ If you want to add a description to the example, you can use CommonMark
  */
 ```
 
+# Cross referencing documentation
+
+dx comments can link to each other using implicit [link labels](http://spec.commonmark.org/0.28/#link-label)
+provided by the documentation tool. These link labels are expected to direct
+users to other pieces of local documentation or, optionally,
+external documentation for other libraries or systems.
+
+```js
+/**
+ * This pseudorandom generator is useful as a swap-in replacement for
+ * [Math.random] that produces deterministic and predictable values.
+ */
+```
+
+The destination of cross reference links is implementation-specified: some may
+link references like nodejs.org or MDN for external documentation, others may not.
+If a link label isn't defined for a given name, the CommonMark behavior of showing
+the bracketed text should be followed.
+
 ### References
 
 [mdconf]: https://github.com/tj/mdconf
