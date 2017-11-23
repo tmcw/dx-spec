@@ -23,6 +23,49 @@ Any valid CommonMark text is also valid dx. dx extends CommonMark syntax to add
 documentation-related features as well as specific guidance for the positioning
 of documentation comments amongst source code.
 
+## dx builds on top of JavaScript syntax
+
+dx exists to describe JavaScript code as it is written, not to invent new
+features or overwrite existing syntax. For this reason you won't find
+"namespaces" or "public/private". dx will also validate against your code.
+For example, you can't have mismatching params in your code and comments.
+
+```ts
+/* Incrementing cat naps
+ *
+ * - param: `catName` `string` The name of the cat.
+ * - param: `howManyMore` `number` How many naps should the cat take?
+ * - returns: `number` The total number of naps the cat will take.
+ */
+function takeMoreNaps(howManyMore) {
+  // ...
+}
+```
+
+```
+Error: `takeMoreNaps` only has 1 param(s), but you described 2.
+```
+
+## dx (optionally) builds on top of Flow/TypeScript syntax
+
+dx can parse Flow and TypeScript code and will use your types as part of
+the generated output.
+
+```ts
+/* Incrementing cat naps.
+ *
+ * - param: `howManyMore` `string` How many naps should the cat take?
+ * - returns: The total number of naps the cat will take.
+ */
+function takeMoreNaps(howManyMore: number): number {
+  // ...
+}
+```
+
+```
+Error: Cannot set type of `howManyMore` in comment when using Flow/TypeScript.
+```
+
 # Comments
 
 dx is most commonly written as the content of code comments that spell out
