@@ -77,7 +77,7 @@ on their placement within source code.
 function crashTheSystem() {/* … */}
 ```
 
-dx supports [JavaScript comment styles]: multi-line comments, single-line comments,
+dx supports all [JavaScript comment styles]: multi-line comments, single-line comments,
 and with or without leading `*` marks in each row. The following are equivalent:
 
 ```js
