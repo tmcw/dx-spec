@@ -48,8 +48,8 @@ in a backwards-compatible way to CommonMark lists and a format inspired by
 For example:
 
 ```md
-- param: teamName {string}
-- returns: {string} the team's name
+- param: `teamName` `string`
+- returns: `string` the team's name
 ```
 
 **Diferences**: Unlike JSDoc, tags do not start with `@` and instead follow
