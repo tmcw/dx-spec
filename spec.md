@@ -77,6 +77,23 @@ on their placement within source code.
 function crashTheSystem() {/* … */}
 ```
 
+dx supports all [JavaScript comment styles]: multi-line comments, single-line comments,
+and with or without leading `*` marks in each row. The following are equivalent:
+
+```js
+// Crashes the system
+
+/*
+ * Crashes the system
+ */
+
+/* Crashes the system */
+
+/*
+Crashes the system
+*/
+```
+
 **Differences**: Unlike JSDoc, comments do not need to start with `/**` and
 can be single-line C-style comments.
 
@@ -129,3 +146,4 @@ If you want to add a description to the example, you can use CommonMark
 
 [mdconf]: https://github.com/tj/mdconf
 [info strings]: http://spec.commonmark.org/0.28/#info-string
+[JavaScript comment styles]: https://tc39.github.io/ecma262/#sec-comments
