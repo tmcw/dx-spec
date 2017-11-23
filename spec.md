@@ -55,6 +55,34 @@ For example:
 **Diferences**: Unlike JSDoc, tags do not start with `@` and instead follow
 Markdown's list syntax.
 
+## Examples
+
+CommonMark code blocks are treated as examples:
+
+```js
+/*
+ * Starts the dance party.
+ *
+ * ```js
+ * initDanceParty()
+ * ```
+ */
+```
+
+If you want to add a description to the example, you can use CommonMark
+[info strings].
+
+```js
+/*
+ * Starts the dance party.
+ *
+ * ```js Turning it up to 11.
+ * initDanceParty({ turnItUpTo: 11 })
+ * ```
+ */
+```
+
 ### References
 
 [mdconf]: https://github.com/tj/mdconf
+[info strings]: http://spec.commonmark.org/0.28/#info-string
