@@ -81,16 +81,16 @@ dx supports all [JavaScript comment styles]: multi-line comments, single-line co
 and with or without leading `*` marks in each row. The following are equivalent:
 
 ```js
-// Crashes the system
+// Count wobbles
 
 /*
- * Crashes the system
+ * Count wobbles
  */
 
-/* Crashes the system */
+/* Count wobbles */
 
 /*
-Crashes the system
+Count wobbles
 */
 ```
 
