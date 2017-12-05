@@ -161,6 +161,15 @@ link references like nodejs.org or MDN for external documentation, others may no
 If a link label isn't defined for a given name, the CommonMark behavior of showing
 the bracketed text should be followed.
 
+Cross references can be formatted with code spans without affecting their target:
+
+```js
+/**
+ * This wave generator uses [`Math.sin`] to generate smooth sine waves.
+ */
+```
+
+
 ### References
 
 [mdconf]: https://github.com/tj/mdconf
