@@ -1,0 +1,41 @@
+august 25, 2018
+
+thoughts on testable documentation
+
+i only have had a few projects with fully testable documentation - mostly just
+simple-statistics. that project has a lot of documentation. not sure if it's
+a gimmick or something worthwhile. documentation examples being testable is
+something that a lot of people write about wanting it, but there are some
+drawbacks.
+
+anyway, rustdoc does it
+
+https://doc.rust-lang.org/beta/rustdoc/documentation-tests.html
+
+i like rustdoc's approach more than the one i used for simple-statistics, which
+used jsdoctest. mostly because rustdoc just relies on examples completing
+or not completing, whereas jsdoc creates, sort of, assertions built into
+comments. which is a little easy for rustdoc to do because it has rust's built-in
+assert_eq method, but, what if i used console.assert
+
+----
+
+```js
+import fs from 'fs';
+import assert from "assert";
+
+const about = './index.mjs';
+const txt = `assert(score(10) === 'AA');`
+
+import(about).then(({ score }) => {
+  const fn = new Function(['assert', 'score'], txt);
+  fn.apply(undefined, [assert, score]);
+}).catch(e => {
+  console.log('Documentation example failed');
+});
+```
+
+this is kind of neat. does similar stuff to rustdoc. to make it real it
+would need to get the ability to detect globals like 'score' so it can import
+them, and also to maybe be able to run import on its own. maybe these should
+run in a vm.
