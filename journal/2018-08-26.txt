@@ -1,0 +1,59 @@
+august 26, 2018
+
+do parameters need names?
+
+back to thinking about parameters. back in javascript... 1.0 or whatever, they
+were simpler. basically, they all had names.
+
+now, this is also not that simple. parameter names aren't necessarily informative.
+builtins like Math.sin don’t even have them, in the 'native' stringification
+of those functions.
+
+but anyway, back in the day, we almost always had parameter names. but now there
+are forms like `foo({ a }) {}` where the first parameter doesn't have a name.
+we get 'a' property out of it but the parameter isn't called a.
+
+documentation.js was kind of awkward about this, always calling those $0 and $1
+and so on, for what spot they played in the function.
+
+also i think in a lot of cases, parameters don't really _need_ a name. a function
+like
+
+export function luminance(a, b) {
+  const l1 = Math.max(a, b);
+  const l2 = Math.min(a, b);
+  return (l1 + 0.05) / (l2 + 0.05);
+}
+
+why would the documentation want to say 'a', other than as a way to permalink
+to it? maybe like luminanceValue is better. i just wonder about this because
+it's not like you have to call luminance(a = 10, b = 20), you always just
+say luminance(10, 20).
+
+if names were optional you maybe could document this like
+
+---
+
+Get the contrast ratio between two relative luminance values
+
+- Parameters
+  1. luminance value
+  2. another luminance value
+- Returns: contrast ratio
+
+---
+
+what if nesting lists enabled documentation to have multiple signatures?
+
+
+---
+
+- Set an attribute in this selection
+  - Parameters
+    1. attribute name (string)
+    2. value (any)
+  - Returns: the selection
+- Get an attribute in this selection
+  - Parameters
+    1. attribute name (string)
+  - Returns: the value of that attribute
