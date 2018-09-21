@@ -1,0 +1,34 @@
+i got caught up in documentation.js last night, and started on d11n this morning, and
+have made great, but early, progress. it feels like the right direction, to me.
+
+i think d11n should have a hosting component early on, so that it really gets used.
+
+but that does raise the question of where documentation should begin and end. for example,
+are we documenting
+
+
+- a git repository's contents? this is like
+  circleci or travis - you react to git hooks
+  
+- npm modules
+
+- something else entirely?
+
+
+and are we producing
+
+
+- readme.md or other markdown output
+
+- a website?
+
+
+this also brings up the concern of:
+
+
+- should dx be runnable without dependencies?
+
+- will we hit limits in configurability because of bleeding edge requirements?
+
+- how does this operate if it needs to basically be bundle.run and a documentation
+  service, all in one?
