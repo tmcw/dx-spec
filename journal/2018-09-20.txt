@@ -1,0 +1,56 @@
+On runtime documentation access
+-------------------------------
+
+Runtime documentation access is basically when you can type
+and get documentation inline.
+
+           ┌────────────────────────────┐
+           │[function]                  │
+           │                            │
+           │A scale type that smoothly  │
+           │maps from an input domain   │
+           │into an output range.       │
+           └*───────────────────────────┘
+ d3.scaleLinear                          
+                                         
+This is a sort of holy-grail: from tern.js (http://ternjs.net/)
+to languageserver (https://langserver.org/) there are brilliant people
+and rich companies trying to implement this sort of thing, and it's
+just been hard. Tern didn't take off, and languageserver doesn't really
+work well outside of its home court, VSCode.
+
+my work - Observable - has really, really good autocompletion because
+it has direct access to runtime values. whereas other solutions
+tend to have to deal with abstract syntax trees and make a lot of inferences.
+
+so, anyway, can we actually show documentation inline? this would be super
+useful for my work - Observable - and I think it'd be pretty clutch. But
+it's kind of a tricky one. For example, let's say that we have a function with
+documentation like
+
+// add two numbers
+let add = (a, b) => a + b;
+
+There's no real way that we'd be able to get inline documentation from this
+unless the documentation tool
+
+1. re-requested the JavaScript source code with CORS enabled
+2. re-parsed it as an AST
+3. and then was able to match the function it's looking at with the AST
+
+So having access to runtime values in this case doesn't really do anything for you.
+
+maybe i could write a transformation system that would look at that and transform it into something like
+
+let add = (a, b) => a + b;
+docMap.set(add, {description:'add two numbers'});
+
+Could this be cool? Maybe, but then we'd have to think
+
+- when would someone actually publish this file? it'd be pretty inefficient
+  so it'd be something they turn off in dists. i don't want to burden people
+  with publishing modules like this.
+
+What if it's instead a runtime transform, like shimport ( https://github.com/Rich-Harris/shimport )
+so basically it would eliminate step (3) from above - no need to match the AST with the function at hand.
+Which is a good win - that's the scariest step.
