@@ -1,0 +1,204 @@
+august 25, 2018
+
+thoughts on testable documentation
+
+i only have had a few projects with fully testable documentation - mostly just
+simple-statistics. that project has a lot of documentation. not sure if it's
+a gimmick or something worthwhile. documentation examples being testable is
+something that a lot of people write about wanting it, but there are some
+drawbacks.
+
+anyway, rustdoc does it
+
+https://doc.rust-lang.org/beta/rustdoc/documentation-tests.html
+
+i like rustdoc's approach more than the one i used for simple-statistics, which
+used jsdoctest. mostly because rustdoc just relies on examples completing
+or not completing, whereas jsdoc creates, sort of, assertions built into
+comments. which is a little easy for rustdoc to do because it has rust's built-in
+assert_eq method, but, what if i used console.assert
+
+----
+
+```js
+import fs from 'fs';
+import assert from "assert";
+
+const about = './index.mjs';
+const txt = `assert(score(10) === 'AA');`
+
+import(about).then(({ score }) => {
+  const fn = new Function(['assert', 'score'], txt);
+  fn.apply(undefined, [assert, score]);
+}).catch(e => {
+  console.log('Documentation example failed');
+});
+```
+
+this is kind of neat. does similar stuff to rustdoc. to make it real it
+would need to get the ability to detect globals like 'score' so it can import
+them, and also to maybe be able to run import on its own. maybe these should
+run in a vm.
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+august 26, 2018
+
+do parameters need names?
+
+back to thinking about parameters. back in javascript... 1.0 or whatever, they
+were simpler. basically, they all had names.
+
+now, this is also not that simple. parameter names aren't necessarily informative.
+builtins like Math.sin don’t even have them, in the 'native' stringification
+of those functions.
+
+but anyway, back in the day, we almost always had parameter names. but now there
+are forms like `foo({ a }) {}` where the first parameter doesn't have a name.
+we get 'a' property out of it but the parameter isn't called a.
+
+documentation.js was kind of awkward about this, always calling those $0 and $1
+and so on, for what spot they played in the function.
+
+also i think in a lot of cases, parameters don't really _need_ a name. a function
+like
+
+export function luminance(a, b) {
+  const l1 = Math.max(a, b);
+  const l2 = Math.min(a, b);
+  return (l1 + 0.05) / (l2 + 0.05);
+}
+
+why would the documentation want to say 'a', other than as a way to permalink
+to it? maybe like luminanceValue is better. i just wonder about this because
+it's not like you have to call luminance(a = 10, b = 20), you always just
+say luminance(10, 20).
+
+if names were optional you maybe could document this like
+
+---
+
+Get the contrast ratio between two relative luminance values
+
+- Parameters
+  1. luminance value
+  2. another luminance value
+- Returns: contrast ratio
+
+---
+
+what if nesting lists enabled documentation to have multiple signatures?
+
+
+---
+
+- Set an attribute in this selection
+  - Parameters
+    1. attribute name (string)
+    2. value (any)
+  - Returns: the selection
+- Get an attribute in this selection
+  - Parameters
+    1. attribute name (string)
+  - Returns: the value of that attribute
+
+-------------------------------------------------------------------------------
+
+Sept 20
+
+On runtime documentation access
+
+Runtime documentation access is basically when you can type
+and get documentation inline.
+
+           ┌────────────────────────────┐
+           │[function]                  │
+           │                            │
+           │A scale type that smoothly  │
+           │maps from an input domain   │
+           │into an output range.       │
+           └*───────────────────────────┘
+ d3.scaleLinear                          
+                                         
+This is a sort of holy-grail: from tern.js (http://ternjs.net/)
+to languageserver (https://langserver.org/) there are brilliant people
+and rich companies trying to implement this sort of thing, and it's
+just been hard. Tern didn't take off, and languageserver doesn't really
+work well outside of its home court, VSCode.
+
+my work - Observable - has really, really good autocompletion because
+it has direct access to runtime values. whereas other solutions
+tend to have to deal with abstract syntax trees and make a lot of inferences.
+
+so, anyway, can we actually show documentation inline? this would be super
+useful for my work - Observable - and I think it'd be pretty clutch. But
+it's kind of a tricky one. For example, let's say that we have a function with
+documentation like
+
+// add two numbers
+let add = (a, b) => a + b;
+
+There's no real way that we'd be able to get inline documentation from this
+unless the documentation tool
+
+1. re-requested the JavaScript source code with CORS enabled
+2. re-parsed it as an AST
+3. and then was able to match the function it's looking at with the AST
+
+So having access to runtime values in this case doesn't really do anything for you.
+
+maybe i could write a transformation system that would look at that and transform it into something like
+
+let add = (a, b) => a + b;
+docMap.set(add, {description:'add two numbers'});
+
+Could this be cool? Maybe, but then we'd have to think
+
+- when would someone actually publish this file? it'd be pretty inefficient
+  so it'd be something they turn off in dists. i don't want to burden people
+  with publishing modules like this.
+
+What if it's instead a runtime transform, like shimport ( https://github.com/Rich-Harris/shimport )
+so basically it would eliminate step (3) from above - no need to match the AST with the function at hand.
+Which is a good win - that's the scariest step.
+
+
+-------------------------------------------------------------------------------
+
+Sept 21
+
+i got caught up in documentation.js last night, and started on d11n this morning, and
+have made great, but early, progress. it feels like the right direction, to me.
+
+i think d11n should have a hosting component early on, so that it really gets used.
+
+but that does raise the question of where documentation should begin and end. for example,
+are we documenting
+
+
+- a git repository's contents? this is like
+  circleci or travis - you react to git hooks
+  
+- npm modules
+
+- something else entirely?
+
+
+and are we producing
+
+
+- readme.md or other markdown output
+
+- a website?
+
+
+this also brings up the concern of:
+
+
+- should dx be runnable without dependencies?
+
+- will we hit limits in configurability because of bleeding edge requirements?
+
+- how does this operate if it needs to basically be bundle.run and a documentation
+  service, all in one?
