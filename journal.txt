@@ -202,3 +202,16 @@ this also brings up the concern of:
 
 - how does this operate if it needs to basically be bundle.run and a documentation
   service, all in one?
+
+-------------------------------------------------------------------------------
+
+i just realized: what about
+
+class A {
+  // can foo be documented?
+  static foo = 1;
+}
+
+Basically, with this approach - the one I've written in d11n so far - it
+can't. You can't type A.foo and get foo documentation because of limitations
+of the approach. This is also apparently a limitation of docstrings in python.
